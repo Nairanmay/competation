@@ -374,7 +374,7 @@ const togglePenalty = (color, type) => {
 
         {/* Timer */}
         <div className="flex flex-col items-center justify-center w-1/3">
-          <div className={`text-2xl font-mono mb-8 glow-text ${timer <= 15 ? "text-red-500" : ""}`}>
+          <div className={`text-6xl font-mono mb-8 glow-text ${timer <= 15 ? "text-red-500" : ""}`}>
             {formatTime(timer)}
           </div>
           <div className="flex gap-6">
