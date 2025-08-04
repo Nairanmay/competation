@@ -183,7 +183,7 @@ export default function KataScoreboard() {
                 <div
                   key={i}
                   className="bg-black/60 rounded-2xl p-8 shadow-2xl flex flex-col items-center justify-center transform transition duration-300 hover:scale-105"
-                  style={{ width: "180px", height: "180px" }}
+                  style={{ width: "140px", height: "140px" }}
                 >
                   <p className="text-xl font-semibold mb-4">Judge {i + 1}</p>
                   <input
