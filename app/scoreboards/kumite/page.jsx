@@ -5,8 +5,8 @@ import { ArrowLeft } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 
 export default function KumiteScoreboard() {
-  const searchParams = useSearchParams();
-  const competitionTitle = searchParams.get("title") || "Competition Title";
+  // const searchParams = useSearchParams();
+  // const competitionTitle = searchParams.get("title") || "Competition Title";
 
  const [redPlayerName, setRedPlayerName] = useState("");
 const [bluePlayerName, setBluePlayerName] = useState("");
@@ -233,7 +233,7 @@ const togglePenalty = (color, type) => {
   {/* Competition Title (Fixed at Top) */}
   <div className="absolute top-6 w-full flex justify-center z-30">
     <h2 className="text-4xl sm:text-5xl font-bold text-white glow-text">
-      {competitionTitle}
+      Default Kumite Scoreboard Title
     </h2>
 
   </div>
