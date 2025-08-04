@@ -314,7 +314,10 @@ const togglePenalty = (color, type) => {
       )}
 
       {/* Main Layout */}
-      <div className={`flex items-start justify-between w-full max-w-full z-10 px-1 ${flipSides ? "flex-row-reverse" : ""}`}>
+    <div className="mt-16">
+  <div
+    className={`flex items-start justify-between w-full max-w-full z-10 px-1 ${flipSides ? "flex-row-reverse" : ""}`}
+  >
         {/* Red Side */}
         <div className="flex flex-col items-center w-1/3">
      <div className="flex flex-col items-center w-1/3">
@@ -446,7 +449,7 @@ const togglePenalty = (color, type) => {
     </div>
   ))}
 </div>
-
+          </div>
         </div>
       </div>
     </div>
