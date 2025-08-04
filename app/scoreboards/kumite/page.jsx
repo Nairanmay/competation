@@ -243,7 +243,7 @@ const togglePenalty = (color, type) => {
 
 
       {/* Settings & Flip Button */}
-      <div className="flex gap-4 mb-6 z-10">
+      <div className="flex gap-4 mb-2 z-10">
         <button
           onClick={() => setShowSettings(true)}
           className="bg-gray-700 px-6 py-2 rounded-lg hover:bg-gray-600"
@@ -374,7 +374,7 @@ const togglePenalty = (color, type) => {
 
         {/* Timer */}
         <div className="flex flex-col items-center justify-center w-1/3">
-          <div className={`text-[12rem] font-mono mb-8 glow-text ${timer <= 15 ? "text-red-500" : ""}`}>
+          <div className={`text-2xl font-mono mb-8 glow-text ${timer <= 15 ? "text-red-500" : ""}`}>
             {formatTime(timer)}
           </div>
           <div className="flex gap-6">
