@@ -261,3 +261,21 @@ body {
   background: linear-gradient(135deg, #0000ff, #003366, #000033);
   opacity: 1;
 }
+ @keyframes burst {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(2);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(3);
+    opacity: 0;
+  }
+}
+
+.burst-animation {
+  animation: burst 0.4s ease-out forwards;
+}

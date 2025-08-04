@@ -7,6 +7,9 @@ import { useSearchParams } from "next/navigation";
 export default function KumiteScoreboard() {
   // const searchParams = useSearchParams();
   // const competitionTitle = searchParams.get("title") || "Competition Title";
+ const [senshuBlueRemoving, setSenshuBlueRemoving] = useState(false);
+const [senshuRedRemoving, setSenshuRedRemoving] = useState(false);
+
 
  const [redPlayerName, setRedPlayerName] = useState("");
 const [bluePlayerName, setBluePlayerName] = useState("");
@@ -171,26 +174,79 @@ setBluePlayerName("");
 const togglePenalty = (color, type) => {
   if (winner) return;
 
+  const penaltiesOrder = ["C1", "C2", "C3"]; // cumulative sequence
+  const higherPenalties = ["H", "HC", "S"]; // high-level penalties
+
+  const updatePenalties = (prev) => {
+    const updated = { ...prev };
+
+    if (penaltiesOrder.includes(type)) {
+      // C1, C2, C3 logic
+      const index = penaltiesOrder.indexOf(type);
+      if (!prev[type]) {
+        for (let i = 0; i <= index; i++) {
+          updated[penaltiesOrder[i]] = true;
+        }
+      } else {
+        updated[type] = false;
+      }
+    } else if (higherPenalties.includes(type)) {
+      // H, HC, S logic
+      if (!prev[type]) {
+        updated[type] = true;
+        penaltiesOrder.forEach((p) => (updated[p] = true)); // Activate all C1, C2, C3
+      } else {
+        updated[type] = false; // Deactivate only this one
+      }
+    } else {
+      updated[type] = !prev[type];
+    }
+
+    return updated;
+  };
+
   if (color === "red") {
     setRedPenalties((prev) => {
-      const updated = { ...prev, [type]: !prev[type] };
+      const updated = updatePenalties(prev);
 
+      // HC = Opponent wins
       if (type === "HC" && updated.HC) {
-        setWinner("blue"); // Opponent wins
+        setWinner("blue");
         setIsRunning(false);
         clearInterval(intervalId);
       }
+
+      // Remove Senshu for Red if penalty added in last 15s
+      if (!prev[type] && updated[type] && timer <= 15 && senshuRed) {
+        setSenshuRedRemoving(true);
+        setTimeout(() => {
+          setSenshuRed(false);
+          setSenshuRedRemoving(false);
+        }, 400);
+      }
+
       return updated;
     });
   } else {
     setBluePenalties((prev) => {
-      const updated = { ...prev, [type]: !prev[type] };
+      const updated = updatePenalties(prev);
 
+      // HC = Opponent wins
       if (type === "HC" && updated.HC) {
-        setWinner("red"); // Opponent wins
+        setWinner("red");
         setIsRunning(false);
         clearInterval(intervalId);
       }
+
+      // Remove Senshu for Blue if penalty added in last 15s
+      if (!prev[type] && updated[type] && timer <= 15 && senshuBlue) {
+        setSenshuBlueRemoving(true);
+        setTimeout(() => {
+          setSenshuBlue(false);
+          setSenshuBlueRemoving(false);
+        }, 400);
+      }
+
       return updated;
     });
   }
@@ -237,9 +293,10 @@ const togglePenalty = (color, type) => {
     </h2>
 
   </div>
-   <h1 className="text-4xl font-bold mb-4 z-10 glow-text pt-12">
+  <h1 className="text-4xl font-bold mb-4 z-10 glow-text pt-24">
   {winner ? (winner === "draw" ? "Draw!" : `${winner.toUpperCase()} Wins!`) : "Kumite Scoreboard"}
 </h1>
+
 
 
       {/* Settings & Flip Button */}
@@ -314,21 +371,23 @@ const togglePenalty = (color, type) => {
       )}
 
       {/* Main Layout */}
-    <div className="mt-16">
-  <div
-    className={`flex items-start justify-between w-full max-w-full z-10 px-1 ${flipSides ? "flex-row-reverse" : ""}`}
-  >
+      <div className={`flex items-start justify-between w-full max-w-full z-10 px-1 ${flipSides ? "flex-row-reverse" : ""}`}>
         {/* Red Side */}
-        <div className="flex flex-col items-center w-1/3">
+        <div className="flex flex-col items-center w-1/3 -mt-8">
      <div className="flex flex-col items-center w-1/3">
   {/* Player Label & Senshu */}
   <div className="flex items-center gap-3 mb-2">
     <h2 className="text-5xl font-bold text-red-400 glow-text">Red</h2>
-    {senshuRed && (
-      <div className="w-12 h-12 flex items-center justify-center rounded-full border-4 border-yellow-400 text-yellow-400 font-bold text-2xl animate-pulse">
-        S
-      </div>
-    )}
+{senshuRed && (
+  <div
+    className={`w-12 h-12 flex items-center justify-center rounded-full border-4 border-yellow-400 text-yellow-400 font-bold text-2xl ${
+      senshuRedRemoving ? "burst-animation" : "animate-pulse"
+    }`}
+  >
+    S
+  </div>
+)}
+
   </div>
 
   {/* Editable Player Name */}
@@ -395,17 +454,19 @@ const togglePenalty = (color, type) => {
         </div>
 
         {/* Blue Side */}
-        <div className="flex flex-col items-center w-1/3">
+        <div className="flex flex-col items-center w-1/3 -mt-8">
         {/* blue name and senshu symbol */}
       <div className="flex flex-col items-center w-1/3">
   {/* Player Label & Senshu */}
   <div className="flex items-center gap-3 mb-2">
     <h2 className="text-5xl font-bold text-blue-400 glow-text">Blue</h2>
-    {senshuBlue && (
-      <div className="w-12 h-12 flex items-center justify-center rounded-full border-4 border-yellow-400 text-yellow-400 font-bold text-2xl animate-pulse">
-        S
-      </div>
-    )}
+   {senshuBlue && (
+  <div
+    className={`w-12 h-12 flex items-center justify-center rounded-full border-4 border-yellow-400 text-yellow-400 font-bold text-2xl ${senshuBlueRemoving ? "burst-animation" : "animate-pulse"}`}
+  >
+    S
+  </div>
+)}
   </div>
 
   {/* Editable Player Name */}
@@ -449,7 +510,7 @@ const togglePenalty = (color, type) => {
     </div>
   ))}
 </div>
-          </div>
+
         </div>
       </div>
     </div>
