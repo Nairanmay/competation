@@ -228,13 +228,13 @@ export default function KataScoreboard() {
             <div className="flex gap-10 mt-6">
               <button
   onClick={calculateScore}
-  className="bg-green-500 text-white font-bold px-6 py-3 rounded-full hover:scale-105 transition-all text-lg shadow-md"
+  className="bg-green-500 text-white font-bold px-8 py-5 rounded-full hover:scale-105 transition-all text-lg shadow-md"
 >
   Calculate
 </button>
             <button
   onClick={resetNameAndScores}
-  className="bg-red-600 text-white font-bold px-6 py-3 rounded-full hover:scale-105 transition-all text-lg shadow-md"
+  className="bg-red-600 text-white font-bold px-8 py-5 rounded-full hover:scale-105 transition-all text-lg shadow-md"
 >
   Reset
 </button>
