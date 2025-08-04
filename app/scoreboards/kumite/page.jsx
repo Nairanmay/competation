@@ -1,9 +1,13 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";  // ✅ Import ArrowLeft icon
+import { ArrowLeft } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 
-export default function KumiteScoreboard({ competitionTitle = "Kumite Championship" }) {
+export default function KumiteScoreboard() {
+  const searchParams = useSearchParams();
+  const competitionTitle = searchParams.get("title") || "Competition Title";
+
  const [redPlayerName, setRedPlayerName] = useState("");
 const [bluePlayerName, setBluePlayerName] = useState("");
 
