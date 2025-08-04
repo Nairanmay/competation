@@ -237,7 +237,7 @@ const togglePenalty = (color, type) => {
     </h2>
 
   </div>
-   <h1 className="text-4xl font-bold mb-4 z-10 glow-text pt-8">
+   <h1 className="text-4xl font-bold mb-4 z-10 glow-text pt-12">
   {winner ? (winner === "draw" ? "Draw!" : `${winner.toUpperCase()} Wins!`) : "Kumite Scoreboard"}
 </h1>
 
