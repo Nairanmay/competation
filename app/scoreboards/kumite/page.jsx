@@ -232,7 +232,7 @@ const togglePenalty = (color, type) => {
 
   {/* Competition Title (Fixed at Top) */}
   <div className="absolute top-6 w-full flex justify-center z-30">
-    <h2 className="text-4xl sm:text-5xl font-bold text-white glow-text">
+    <h2 className="text-4xl sm:text-5xl font-bold text-white glow-text pb-6">
       Default Kumite Scoreboard Title
     </h2>
 
