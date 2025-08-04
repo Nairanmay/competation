@@ -231,8 +231,8 @@ const togglePenalty = (color, type) => {
   <audio ref={victorySound} src="/sounds/long-whistle.mp3" preload="auto"></audio>
 
   {/* Competition Title (Fixed at Top) */}
-  <div className="absolute top-6 w-full flex justify-center z-30">
-    <h2 className="text-4xl sm:text-5xl font-bold text-white glow-text pb-6">
+  <div className="absolute top-6 w-full flex justify-center z-30 pb-6">
+    <h2 className="text-4xl sm:text-5xl font-bold text-white glow-text ">
       Default Kumite Scoreboard Title
     </h2>
 
