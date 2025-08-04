@@ -183,7 +183,7 @@ export default function KataScoreboard() {
                 <div
                   key={i}
                   className="bg-black/60 rounded-2xl p-8 shadow-2xl flex flex-col items-center justify-center transform transition duration-300 hover:scale-105"
-                  style={{ width: "140px", height: "140px" }}
+                  style={{ width: "160px", height: "160px" }}
                 >
                   <p className="text-xl font-semibold mb-4">Judge {i + 1}</p>
                   <input
@@ -227,17 +227,17 @@ export default function KataScoreboard() {
             {/* Buttons */}
             <div className="flex gap-10 mt-6">
               <button
-                onClick={calculateScore}
-                className="bg-green-500 text-white font-bold px-14 py-6 rounded-full hover:scale-110 transition-all text-3xl shadow-lg"
-              >
-                Calculate
-              </button>
-              <button
-                onClick={resetNameAndScores}
-                className="bg-red-600 text-white font-bold px-14 py-6 rounded-full hover:scale-110 transition-all text-3xl shadow-lg"
-              >
-                Reset
-              </button>
+  onClick={calculateScore}
+  className="bg-green-500 text-white font-bold px-6 py-3 rounded-full hover:scale-105 transition-all text-lg shadow-md"
+>
+  Calculate
+</button>
+            <button
+  onClick={resetNameAndScores}
+  className="bg-red-600 text-white font-bold px-6 py-3 rounded-full hover:scale-105 transition-all text-lg shadow-md"
+>
+  Reset
+</button>
             </div>
           </div>
         </div>
