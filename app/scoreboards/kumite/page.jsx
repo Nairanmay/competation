@@ -79,11 +79,11 @@ const [bluePenalties, setBluePenalties] = useState({
   }, [timer]);
 
   // Long whistle on victory
-  useEffect(() => {
-    if (winner && winner !== "draw" && victorySound.current) {
-      victorySound.current.play();
-    }
-  }, [winner]);
+useEffect(() => {
+  if (winner && victorySound.current) {
+    victorySound.current.play();
+  }
+}, [winner]);
 //used for spacebar to start/stop timer
   useEffect(() => {
   const handleSpace = (e) => {
@@ -152,14 +152,22 @@ setBluePlayerName("");
 
   };
 
+  const toggleSenshuRed = () => {
+  if (winner) return;
+  setSenshuRed((prev) => !prev);
+  setSenshuBlue(false); // only one player can have senshu
+};
+
+const toggleSenshuBlue = () => {
+  if (winner) return;
+  setSenshuBlue((prev) => !prev);
+  setSenshuRed(false); // only one player can have senshu
+};
+
+
   const addPoints = (color, points) => {
     if (winner || points <= 0) return;
 
-    if (!firstPoint) {
-      if (color === "red") setSenshuRed(true);
-      else setSenshuBlue(true);
-      setFirstPoint(true);
-    }
 
     if (color === "red") setRedScore(redScore + points);
     else setBlueScore(blueScore + points);
@@ -175,7 +183,7 @@ const togglePenalty = (color, type) => {
   if (winner) return;
 
   const penaltiesOrder = ["C1", "C2", "C3"]; // cumulative sequence
-  const higherPenalties = ["H", "HC", "S"]; // high-level penalties
+  const higherPenalties = ["HC", "H", "S"]; // high-level penalties
 
   const updatePenalties = (prev) => {
     const updated = { ...prev };
@@ -210,7 +218,7 @@ const togglePenalty = (color, type) => {
       const updated = updatePenalties(prev);
 
       // HC = Opponent wins
-      if (type === "HC" && updated.HC) {
+      if (type === "H" && updated.HC) {
         setWinner("blue");
         setIsRunning(false);
         clearInterval(intervalId);
@@ -232,7 +240,7 @@ const togglePenalty = (color, type) => {
       const updated = updatePenalties(prev);
 
       // HC = Opponent wins
-      if (type === "HC" && updated.HC) {
+      if (type === "H" && updated.HC) {
         setWinner("red");
         setIsRunning(false);
         clearInterval(intervalId);
@@ -284,15 +292,28 @@ const togglePenalty = (color, type) => {
 </div>
   {/* Audio */}
   <audio ref={warningSound} src="/sounds/double-whistle.mp3" preload="auto"></audio>
-  <audio ref={victorySound} src="/sounds/long-whistle.mp3" preload="auto"></audio>
+  <audio ref={victorySound} src="/LONGWIST.m4a" preload="auto"></audio>
 
   {/* Competition Title (Fixed at Top) */}
-  <div className="absolute top-6 w-full flex justify-center z-30 pb-6">
-    <h2 className="text-4xl sm:text-5xl font-bold text-white glow-text ">
-      Default Kumite Scoreboard Title
-    </h2>
+<div className="relative flex items-center justify-center w-full">
+  {/* Left logo */}
+  <img
+    src="/LOGO1.png"
+    alt="Left Logo"
+    className="absolute left-70 h-18 w-auto"
+  />
 
-  </div>
+  {/* Competition title (stays centered) */}
+  <h1 className="text-4xl font-bold">INTER SCHOOL KARATE COMPITION 2025</h1>
+
+  {/* Right logo */}
+  <img
+    src="/LOGO2.png"
+    alt="Right Logo"
+    className="absolute right-70 h-20 w-auto"
+  />
+</div>
+
   <h1 className="text-4xl font-bold mb-4 z-10 glow-text pt-24">
   {winner ? (winner === "draw" ? "Draw!" : `${winner.toUpperCase()} Wins!`) : "Kumite Scoreboard"}
 </h1>
@@ -378,15 +399,17 @@ const togglePenalty = (color, type) => {
   {/* Player Label & Senshu */}
   <div className="flex items-center gap-3 mb-2">
     <h2 className="text-5xl font-bold text-red-400 glow-text">Red</h2>
-{senshuRed && (
-  <div
-    className={`w-12 h-12 flex items-center justify-center rounded-full border-4 border-yellow-400 text-yellow-400 font-bold text-2xl ${
-      senshuRedRemoving ? "burst-animation" : "animate-pulse"
+<div
+  onClick={toggleSenshuRed}
+  className={`w-12 h-12 flex items-center justify-center rounded-full border-4 font-bold text-2xl cursor-pointer transition-all duration-300 ..."
+
+    ${senshuRed 
+      ? "border-yellow-400 text-yellow-400 bg-gray-900" 
+      : "border-gray-500 text-gray-500 bg-gray-800"
     }`}
-  >
-    S
-  </div>
-)}
+>
+  S
+</div>
 
   </div>
 
@@ -419,7 +442,7 @@ const togglePenalty = (color, type) => {
             <button onClick={() => subtractPoint("red")} className="bg-gray-700 px-4 py-3 rounded-xl text-2xl hover:bg-gray-600">–</button>
           </div>
         <div className="grid grid-cols-3 gap-4 mt-6">
-  {["C1", "C2", "C3", "H", "HC", "S"].map((pen) => (
+  {["C1", "C2", "C3", "HC", "H", "S"].map((pen) => (
     <div
       key={pen}
       onClick={() => togglePenalty("red", pen)}
@@ -448,7 +471,7 @@ const togglePenalty = (color, type) => {
             </button>
             </div>
         <div className="mt-4 text-xl font-semibold text-gray-300">
-  Winning Gap: <span className="text-white">{winningGap}</span>
+  Winning Score: <span className="text-white">{winningGap}</span>
 </div>
 
         </div>
@@ -460,13 +483,16 @@ const togglePenalty = (color, type) => {
   {/* Player Label & Senshu */}
   <div className="flex items-center gap-3 mb-2">
     <h2 className="text-5xl font-bold text-blue-400 glow-text">Blue</h2>
-   {senshuBlue && (
-  <div
-    className={`w-12 h-12 flex items-center justify-center rounded-full border-4 border-yellow-400 text-yellow-400 font-bold text-2xl ${senshuBlueRemoving ? "burst-animation" : "animate-pulse"}`}
-  >
-    S
-  </div>
-)}
+ <div
+  onClick={toggleSenshuBlue}
+className={`w-12 h-12 flex items-center justify-center rounded-full border-4 font-bold text-2xl cursor-pointer transition-all duration-300 ..."
+    ${senshuBlue
+      ? "border-yellow-400 text-yellow-400 bg-gray-900" 
+      : "border-gray-500 text-gray-500 bg-gray-800"
+    }`}
+>
+  S
+</div>
   </div>
 
   {/* Editable Player Name */}
@@ -498,7 +524,7 @@ const togglePenalty = (color, type) => {
             <button onClick={() => subtractPoint("blue")} className="bg-gray-700 px-4 py-3 rounded-xl text-2xl hover:bg-gray-600">–</button>
           </div>
        <div className="grid grid-cols-3 gap-4 mt-6">
-  {["C1", "C2", "C3", "H", "HC", "S"].map((pen) => (
+  {["C1", "C2", "C3", "HC", "H", "S"].map((pen) => (
     <div
       key={pen}
       onClick={() => togglePenalty("blue", pen)}
